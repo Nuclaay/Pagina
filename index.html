@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de Herramientas - Pañol</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    .contenedor {
+        max-width: 900px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        background-color: #0078d7;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #005fa3;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #0078d7;
+        color: white;
+    }
+
+    .devolver {
+        background-color: #28a745;
+    }
+
+    .devolver:hover {
+        background-color: #218838;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+    <h1>📦 Sistema de Préstamo de Herramientas</h1>
+
+    <label>Nombre del Alumno</label>
+    <input type="text" id="alumno">
+
+    <label>Nombre del Profesor</label>
+    <input type="text" id="profesor">
+
+    <label>Herramienta Retirada</label>
+    <input type="text" id="herramienta">
+
+    <button onclick="agregarPrestamo()">Registrar Préstamo</button>
+
+    <h2>Herramientas Pendientes de Devolución</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Alumno</th>
+                <th>Profesor</th>
+                <th>Herramienta</th>
+                <th>Fecha</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody id="tablaPrestamos"></tbody>
+    </table>
+</div>
+
+<script>
+
+let prestamos = JSON.parse(localStorage.getItem("prestamos")) || [];
+
+function guardarDatos() {
+    localStorage.setItem("prestamos", JSON.stringify(prestamos));
+}
+
+function mostrarPrestamos() {
+    const tabla = document.getElementById("tablaPrestamos");
+    tabla.innerHTML = "";
+
+    prestamos.forEach((prestamo, indice) => {
+        tabla.innerHTML += `
+            <tr>
+                <td>${prestamo.alumno}</td>
+                <td>${prestamo.profesor}</td>
+                <td>${prestamo.herramienta}</td>
+                <td>${prestamo.fecha}</td>
+                <td>
+                    <button class="devolver"
+                        onclick="devolverHerramienta(${indice})">
+                        Devolver
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function agregarPrestamo() {
+
+    const alumno = document.getElementById("alumno").value.trim();
+    const profesor = document.getElementById("profesor").value.trim();
+    const herramienta = document.getElementById("herramienta").value.trim();
+
+    if (!alumno || !profesor || !herramienta) {
+        alert("Complete todos los campos.");
+        return;
+    }
+
+    prestamos.push({
+        alumno,
+        profesor,
+        herramienta,
+        fecha: new Date().toLocaleString()
+    });
+
+    guardarDatos();
+    mostrarPrestamos();
+
+    document.getElementById("alumno").value = "";
+    document.getElementById("profesor").value = "";
+    document.getElementById("herramienta").value = "";
+}
+
+function devolverHerramienta(indice) {
+    prestamos.splice(indice, 1);
+    guardarDatos();
+    mostrarPrestamos();
+}
+
+mostrarPrestamos();
+
+</script>
+
+</body>
+</html>
