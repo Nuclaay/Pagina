@@ -85,6 +85,9 @@
 
     <label>Nombre del Profesor</label>
     <input type="text" id="profesor">
+    
+    <label>Curso</label>
+    <input type="text" id="curso">
 
     <label>Herramienta Retirada</label>
     <input type="text" id="herramienta">
@@ -98,6 +101,7 @@
             <tr>
                 <th>Alumno</th>
                 <th>Profesor</th>
+                <th>Curso</th>
                 <th>Herramienta</th>
                 <th>Fecha</th>
                 <th>Acción</th>
@@ -124,6 +128,7 @@ function mostrarPrestamos() {
             <tr>
                 <td>${prestamo.alumno}</td>
                 <td>${prestamo.profesor}</td>
+                <td>${prestamo.curso}</td>
                 <td>${prestamo.herramienta}</td>
                 <td>${prestamo.fecha}</td>
                 <td>
@@ -141,25 +146,28 @@ function agregarPrestamo() {
 
     const alumno = document.getElementById("alumno").value.trim();
     const profesor = document.getElementById("profesor").value.trim();
+    const curso = document.getElementById("curso").value.trim();
     const herramienta = document.getElementById("herramienta").value.trim();
 
-    if (!alumno || !profesor || !herramienta) {
-        alert("Complete todos los campos.");
-        return;
-    }
+if (!alumno || !profesor || !curso || !herramienta) {
+    alert("Complete todos los campos.");
+    return;
+}
 
     prestamos.push({
-        alumno,
-        profesor,
-        herramienta,
-        fecha: new Date().toLocaleString()
-    });
+    alumno,
+    profesor,
+    curso,
+    herramienta,
+    fecha: new Date().toLocaleString()
+});
 
     guardarDatos();
     mostrarPrestamos();
 
     document.getElementById("alumno").value = "";
     document.getElementById("profesor").value = "";
+    document.getElementById("curso").value = "";
     document.getElementById("herramienta").value = "";
 }
 
